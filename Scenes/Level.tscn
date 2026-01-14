@@ -15,6 +15,14 @@ position = Vector2(-166, -10)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
 
+[node name="ProgressBar" type="ProgressBar" parent="Player"]
+offset_left = -52.0
+offset_top = -57.0
+offset_right = -6.0
+offset_bottom = -30.0
+size_flags_horizontal = 0
+value = 100.0
+
 [node name="Ogre" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(-46, -1)
 
