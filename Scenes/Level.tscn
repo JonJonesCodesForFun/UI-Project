@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=4 uid="uid://giltv7yrltbt"]
+[gd_scene load_steps=5 format=4 uid="uid://giltv7yrltbt"]
 
 [ext_resource type="PackedScene" uid="uid://bff8vrk62tyue" path="res://Scenes/TileMap.tscn" id="1_i1qvb"]
 [ext_resource type="PackedScene" uid="uid://bfoummb5wftve" path="res://Scenes/Player.tscn" id="2_7i348"]
 [ext_resource type="PackedScene" uid="uid://v074xqwg3vcg" path="res://Scenes/Ogre.tscn" id="3_4iqyc"]
+[ext_resource type="PackedScene" uid="uid://drqk8nyt17ow0" path="res://pausescreen.tscn" id="4_fuudy"]
 
 [node name="Level" type="Node2D"]
 
@@ -15,14 +16,6 @@ position = Vector2(-166, -10)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
 
-[node name="ProgressBar" type="ProgressBar" parent="Player"]
-offset_left = -52.0
-offset_top = -57.0
-offset_right = -6.0
-offset_bottom = -30.0
-size_flags_horizontal = 0
-value = 100.0
-
 [node name="Ogre" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(-46, -1)
 
@@ -31,3 +24,5 @@ position = Vector2(321, 228)
 
 [node name="Ogre3" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(330, -159)
+
+[node name="Pause" parent="." instance=ExtResource("4_fuudy")]
