@@ -7,7 +7,6 @@ public partial class Player : Creature
 	[Signal]
 	public delegate void LivesChangedEventHandler(int lives);
 
-
 	[Export]
 	public int Lives = 3;
 	
@@ -17,6 +16,8 @@ public partial class Player : Creature
 
 	private AnimatedSprite2D _sprite;
 	private Area2D _hurtBox;
+
+	private bool _isFlashing;
 
 	public override void _Ready()
 	{
@@ -32,42 +33,44 @@ public partial class Player : Creature
 		var direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 		
 		UpdateVelocity(direction);
-		
 		UpdateDirection(direction);
 		
 		var attacking = Input.IsActionJustPressed("ui_accept");
-		//don't let the use spam attacks
 		if (attacking && !IsAttacking)
 			ActivateAttack();
+			
 		UpdateSpriteAnimation(direction, attacking);
-		
 		MoveAndSlide();
 	}
 
-	public void TakeDamage(int damage)
+	public async void TakeDamage(int damage)
 	{
+		if (!_isFlashing)
+		{
+			_isFlashing = true;
+			_sprite.Modulate = Colors.Red;
+			await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+			_sprite.Modulate = Colors.White;
+			_isFlashing = false;
+		}
+
 		CurrentHealth -= damage;
 
 		if (CurrentHealth <= 0)
 		{
 			Lives -= 1;
+			if (Lives <= 0) Lives = 3;
+
 			EmitSignal(SignalName.LivesChanged, Lives);
-			if (Lives <= 0) {
-				GD.Print("Game Over");
-				GetTree().Quit();
-			}
-			else
-			{
-				GD.Print($"Player Lives: {Lives}");
-				GlobalPosition = _startPosition;
-				CurrentHealth = MaxHealth;
-			}
+
+			GlobalPosition = _startPosition;
+			CurrentHealth = MaxHealth;
 		}
 		
 		GD.Print($"Player Health: {CurrentHealth}");
 		EmitSignal(Creature.SignalName.HealthChanged, CurrentHealth, MaxHealth);
 	}
-	
+
 	private void UpdateVelocity(Vector2 direction)
 	{
 		Vector2 velocity = Velocity;
@@ -75,7 +78,6 @@ public partial class Player : Creature
 		{
 			velocity.X = direction.X * Speed;
 			velocity.Y = direction.Y * Speed;
-			
 		}
 		else
 		{
@@ -103,7 +105,6 @@ public partial class Player : Creature
 
 	private void UpdateSpriteAnimation(Vector2 direction, bool attacking)
 	{
-		//don't interrupt the attack animation
 		if (!IsAttacking)
 		{
 			if (direction != Vector2.Zero)
@@ -111,13 +112,8 @@ public partial class Player : Creature
 			else
 				_sprite.Play("idle");
 			
-			//attack needs to be checked first to get priority
 			if (attacking)
-			{
 				_sprite.Play("attack");
-				//stop moving if you're attacking
-				Vector2 velocity = Vector2.Zero;
-			}
 		}
 	}
 
@@ -127,10 +123,7 @@ public partial class Player : Creature
 		foreach (var body in bodies)
 		{
 			if (body is Enemy enemy)
-			{
-				//for this demo, just assume each attack does 1 damage
 				enemy.TakeDamage(1);
-			}
 		}
 	}
 }
