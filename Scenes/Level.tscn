@@ -26,3 +26,7 @@ position = Vector2(321, 228)
 position = Vector2(330, -159)
 
 [node name="Pause" parent="." instance=ExtResource("4_fuudy")]
+
+[connection signal="EnemyDied" from="Ogre" to="Player" method="UpdateScore"]
+[connection signal="EnemyDied" from="Ogre2" to="Player" method="UpdateScore"]
+[connection signal="EnemyDied" from="Ogre3" to="Player" method="UpdateScore"]

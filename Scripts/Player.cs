@@ -20,6 +20,7 @@ public partial class Player : Creature
 	private bool _isFlashing;
 
 	private ProgressBar _progressBar;
+	private Label _score;
 
 	public override void _Ready()
 	{
@@ -32,6 +33,9 @@ public partial class Player : Creature
 		_progressBar = GetNode<ProgressBar>("ProgressBar");
 		_progressBar.MaxValue = MaxHealth;
 		_progressBar.Value = CurrentHealth;
+		
+		_score = GetNode<Label>("score");
+		_score.Text = "0";
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -139,5 +143,12 @@ public partial class Player : Creature
 			if (body is Enemy enemy)
 				enemy.TakeDamage(1);
 		}
+	}
+	
+	public void UpdateScore(int points) {
+		var old_score = int.Parse(_score.Text);
+		var new_score = old_score + points;
+		
+		_score.Text = new_score.ToString();
 	}
 }

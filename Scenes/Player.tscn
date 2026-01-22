@@ -133,3 +133,9 @@ offset_right = 73.0
 offset_bottom = 27.0
 theme = SubResource("Theme_kyqiw")
 value = 100.0
+
+[node name="score" type="Label" parent="."]
+offset_left = -44.0
+offset_top = -57.0
+offset_right = -16.0
+offset_bottom = -30.0
