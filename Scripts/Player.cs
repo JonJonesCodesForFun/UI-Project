@@ -8,7 +8,7 @@ public partial class Player : Creature
 	public delegate void LivesChangedEventHandler(int lives);
 
 	[Export]
-	public int Lives = 1;
+	public int Lives = 3;
 	
 	private Vector2 _startPosition;
 
@@ -21,6 +21,7 @@ public partial class Player : Creature
 
 	private ProgressBar _progressBar;
 	private Label _score;
+	private Label _lives;
 
 	public override void _Ready()
 	{
@@ -51,6 +52,8 @@ public partial class Player : Creature
 			
 		UpdateSpriteAnimation(direction, attacking);
 		MoveAndSlide();
+		
+		GetNode<Label>("lives").Text=Lives.ToString(); 
 	}
 
 	public async void TakeDamage(int damage)
@@ -71,7 +74,7 @@ public partial class Player : Creature
 		{
 			Lives -= 1;
 			EmitSignal(SignalName.LivesChanged, Lives);
-
+			//update lives label
 			
 			if (Lives <= 0)
 			{
