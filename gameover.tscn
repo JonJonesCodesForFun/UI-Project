@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq1ylft6e1le8"]
+[gd_scene load_steps=3 format=3 uid="uid://cq1ylft6e1le8"]
 
 [ext_resource type="Texture2D" uid="uid://cyu2k6xcfv45w" path="res://Assets/975978.jpg" id="1_4nh4k"]
+[ext_resource type="Script" uid="uid://c5kolqn00w6m8" path="res://gameover.cs" id="1_tpdqf"]
 
 [node name="gameover" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_tpdqf")
 
 [node name="975978" type="Sprite2D" parent="."]
 position = Vector2(566, 295)

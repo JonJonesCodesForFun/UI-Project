@@ -8,7 +8,7 @@ public partial class Player : Creature
 	public delegate void LivesChangedEventHandler(int lives);
 
 	[Export]
-	public int Lives = 3;
+	public int Lives = 1;
 	
 	private Vector2 _startPosition;
 
@@ -19,6 +19,8 @@ public partial class Player : Creature
 
 	private bool _isFlashing;
 
+	private ProgressBar _progressBar;
+
 	public override void _Ready()
 	{
 		CurrentHealth = MaxHealth;
@@ -26,6 +28,10 @@ public partial class Player : Creature
 		
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		_hurtBox = GetNode<Area2D>("HurtBox");
+
+		_progressBar = GetNode<ProgressBar>("ProgressBar");
+		_progressBar.MaxValue = MaxHealth;
+		_progressBar.Value = CurrentHealth;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -49,22 +55,30 @@ public partial class Player : Creature
 		{
 			_isFlashing = true;
 			_sprite.Modulate = Colors.Red;
-			await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+			await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
 			_sprite.Modulate = Colors.White;
 			_isFlashing = false;
 		}
 
 		CurrentHealth -= damage;
+		_progressBar.Value = CurrentHealth;
 
 		if (CurrentHealth <= 0)
 		{
 			Lives -= 1;
-			if (Lives <= 0) Lives = 3;
-
 			EmitSignal(SignalName.LivesChanged, Lives);
 
+			
+			if (Lives <= 0)
+			{
+				GetTree().ChangeSceneToFile("res://gameover.tscn");
+				return; 
+			}
+
+			
 			GlobalPosition = _startPosition;
 			CurrentHealth = MaxHealth;
+			_progressBar.Value = CurrentHealth;
 		}
 		
 		GD.Print($"Player Health: {CurrentHealth}");

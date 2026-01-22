@@ -10,7 +10,7 @@ public partial class Enemy : Creature
 	
 	[Export]
 	public int Points = 10;
-	
+
 	private bool IsAttacking => _sprite.Animation.ToString() == "attack";
 	private bool HasTarget => _hurtBox.GetOverlappingBodies().Any(x => x is Player);
 	
@@ -19,6 +19,9 @@ public partial class Enemy : Creature
 	private AnimatedSprite2D _sprite;
 	private Area2D _hurtBox;
 	private Timer _attackTimer;
+
+	// ✅ ADDED (C# version of @onready var progress_bar)
+	private ProgressBar _progressBar;
 	
 	public override void _Ready()
 	{
@@ -32,9 +35,13 @@ public partial class Enemy : Creature
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		_hurtBox = GetNode<Area2D>("HurtBox");
 		_attackTimer = GetNode<Timer>("AttackTimer");
+
+		
+		_progressBar = GetNode<ProgressBar>("ProgressBar");
+		_progressBar.MaxValue = MaxHealth;
+		_progressBar.Value = CurrentHealth;
 	}
 
-	
 	public override void _Process(double delta)
 	{
 		_navAgent.TargetPosition = _player.GlobalPosition;
@@ -57,6 +64,10 @@ public partial class Enemy : Creature
 	{
 		GD.Print("enemy hit");
 		CurrentHealth -= damage;
+
+		
+		_progressBar.Value = CurrentHealth;
+
 		if (CurrentHealth <= 0)
 		{
 			EmitSignal(SignalName.EnemyDied, Points);
@@ -82,7 +93,6 @@ public partial class Enemy : Creature
 	
 	private void UpdateSpriteAnimation(Vector2 direction, bool attacking)
 	{
-		//don't interrupt the attack animation
 		if (!IsAttacking)
 		{
 			if (direction != Vector2.Zero)
@@ -90,13 +100,10 @@ public partial class Enemy : Creature
 			else
 				_sprite.Play("idle");
 			
-			//attack needs to be checked first to get priority
 			if (attacking)
 			{
 				_sprite.Play("attack");
-				//stop moving if you're attacking
 				Vector2 velocity = Vector2.Zero;
-				//pause the animation to give a timer delay
 				_sprite.Pause();
 				_attackTimer.Start();
 			}
@@ -117,7 +124,6 @@ public partial class Enemy : Creature
 			{
 				if (body is Player player)
 				{
-					//for this demo, just assume each attack does 1 damage
 					player.TakeDamage(1);
 				}
 			}

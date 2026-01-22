@@ -119,7 +119,7 @@ radius = 36.0
 height = 72.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ooqej"]
-radius = 40.152832
+radius = 40.1528
 
 [node name="Ogre" type="CharacterBody2D"]
 collision_layer = 3
@@ -152,6 +152,11 @@ debug_color = Color(0.994536, 0, 0.220482, 0.42)
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_right = 68.0
+offset_bottom = 27.0
+value = 100.0
 
 [connection signal="animation_finished" from="Sprite" to="." method="DealDamage"]
 [connection signal="timeout" from="AttackTimer" to="." method="ResumeAttack"]
