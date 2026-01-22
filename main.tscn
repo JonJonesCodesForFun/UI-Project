@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddkgq66ulpe42"]
+
+[ext_resource type="Script" uid="uid://cl15dkxewdrjt" path="res://Main.cs" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://7kwk3bfckord" path="res://Assets/31193.jpg" id="1_ig7tw"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xm2m"]
+texture = ExtResource("1_ig7tw")
+
+[node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0xm2m")
+
+[node name="31193" type="Sprite2D" parent="."]
+position = Vector2(469, 236)
+scale = Vector2(0.445, 0.445)
+skew = -0.328122
+texture = ExtResource("1_ig7tw")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -339.0
+offset_top = -149.0
+offset_right = -250.0
+offset_bottom = -118.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(6.88047, 7.77251)
+text = "Star Game"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_0xm2m")
+
+[connection signal="pressed" from="Button" to="." method="_on_start_pressed"]
